@@ -65,7 +65,7 @@ public class User implements Serializable {
 	/** Default constructor. */
 	public User() {
 	}
-
+	
 	public long getId() {
 		return id;
 	}
