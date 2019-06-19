@@ -1,7 +1,5 @@
 package com.millenium.devopsbuddy.utils;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.millenium.devopsbuddy.backend.persistence.domain.backend.User;
 
 public class UserUtils {
@@ -11,11 +9,9 @@ public class UserUtils {
 	}
 	
 	public static User createBasicUser() {
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		
 		User user = new User();
 		user.setUsername("basicUser");
-		user.setPassword(encoder.encode("secret"));
+		user.setPassword("secret");
 		user.setEmail("me@example.com");
 		user.setFirstName("firstName");
 		user.setLastName("lastName");

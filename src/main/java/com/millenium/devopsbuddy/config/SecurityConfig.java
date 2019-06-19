@@ -1,5 +1,6 @@
 package com.millenium.devopsbuddy.config;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private Environment env;
+	
+	private static final String SALT = "aswerh;jh5ghj";
 	
 	/** Public URLs */
 	private static final String[] PUBLIC_MATCHERS = { 
@@ -53,12 +56,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	public void configureGLobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userSecurityService);
+		auth.userDetailsService(userSecurityService).passwordEncoder(passwordEncoder());
 	}
 	
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
+	    return new BCryptPasswordEncoder(12, new SecureRandom(SALT.getBytes()));
 	}
 	
 }
