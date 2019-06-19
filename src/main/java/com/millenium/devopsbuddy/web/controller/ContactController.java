@@ -26,7 +26,7 @@ public class ContactController {
 	
 	@Autowired
 	private EmailService emailService;
-
+	
 	@GetMapping("/contact")
 	public String contactGet(ModelMap model) {
 		FeedbackPojo feedbackPojo = new FeedbackPojo();

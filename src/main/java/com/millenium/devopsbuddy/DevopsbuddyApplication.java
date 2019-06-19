@@ -16,11 +16,11 @@ import com.millenium.devopsbuddy.backend.persistence.domain.backend.UserRole;
 import com.millenium.devopsbuddy.backend.service.UserService;
 import com.millenium.devopsbuddy.enums.PlansEnum;
 import com.millenium.devopsbuddy.enums.RolesEnum;
-import com.millenium.devopsbuddy.utils.UsersUtils;
+import com.millenium.devopsbuddy.utils.UserUtils;
 
 @SpringBootApplication
 public class DevopsbuddyApplication implements CommandLineRunner {
-
+	
 	/** The application logger */
 	private static final Logger LOG = LoggerFactory.getLogger(DevopsbuddyApplication.class);
 	
@@ -33,12 +33,11 @@ public class DevopsbuddyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		User user = UsersUtils.createBasicUser();
+		User user = UserUtils.createBasicUser();
 		Set<UserRole> userRoles = new HashSet<>();
-		userRoles.add(new UserRole(user, new Role(RolesEnum.BASIC)));
+		userRoles.add(new UserRole(user, new Role(RolesEnum.PRO)));
 		LOG.debug("Creating user with username {}", user.getUsername());
-		//userService.createUser(user, PlansEnum.BASIC, userRoles);
+		userService.createUser(user, PlansEnum.PRO, userRoles);
 		LOG.info("User {} created", user.getUsername());
 	}
-
 }

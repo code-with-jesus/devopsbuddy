@@ -18,7 +18,7 @@ import com.millenium.devopsbuddy.backend.persistence.domain.backend.UserRole;
 import com.millenium.devopsbuddy.backend.service.UserService;
 import com.millenium.devopsbuddy.enums.PlansEnum;
 import com.millenium.devopsbuddy.enums.RolesEnum;
-import com.millenium.devopsbuddy.utils.UsersUtils;
+import com.millenium.devopsbuddy.utils.UserUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
@@ -30,7 +30,7 @@ public class UserServiceIntegrationTest {
 	@Test
 	public void testCreateNewUser() {
 		Set<UserRole> userRoles = new HashSet<>();
-		User basicUser = UsersUtils.createBasicUser();
+		User basicUser = UserUtils.createBasicUser();
 		userRoles.add(new UserRole(basicUser, new Role(RolesEnum.BASIC)));
 		
 		User user = userService.createUser(basicUser, PlansEnum.BASIC, userRoles);

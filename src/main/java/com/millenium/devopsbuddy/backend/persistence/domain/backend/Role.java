@@ -23,7 +23,7 @@ public class Role implements Serializable {
 	
 	private String name;
 	
-	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<UserRole> userRoles = new HashSet<>();
 
 	
@@ -73,7 +73,7 @@ public class Role implements Serializable {
 		if (this == obj) return true;
 		if (obj == null || getClass() != obj.getClass()) return false;
 		Role other = (Role) obj;
-		return id != other.id;
+		return id == other.id;
 	}
 	
 }

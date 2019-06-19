@@ -2,6 +2,9 @@ package com.millenium.devopsbuddy.backend.service;
 
 import java.util.Set;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,9 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@PersistenceContext
+	private EntityManager em;
+	
 	@Transactional
 	public User createUser(User user, PlansEnum plansEnum, Set<UserRole> userRoles) {
 		Plan plan = new Plan(plansEnum);
@@ -39,7 +45,13 @@ public class UserService {
 			roleRepository.save(ur.getRole());
 		}
 		user.getUserRoles().addAll(userRoles);
+		// flush referenced objects before the user is saved
+		em.flush();
 		user = userRepository.save(user);
 		return user;
+	}
+	
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username);
 	}
 }

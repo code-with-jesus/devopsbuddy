@@ -54,7 +54,7 @@ public class Plan implements Serializable {
 		if (this == obj) return true;
 		if (obj == null || getClass() != obj.getClass()) return false;
 		Plan other = (Plan) obj;
-		return id != other.id;
+		return id == other.id;
 	}
 
 	
