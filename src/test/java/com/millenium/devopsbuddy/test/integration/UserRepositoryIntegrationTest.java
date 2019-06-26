@@ -1,9 +1,11 @@
 package com.millenium.devopsbuddy.test.integration;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,7 +25,7 @@ import com.millenium.devopsbuddy.enums.RolesEnum;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
-public class UserIntegrationTest extends AbstractIntegrationTest {
+public class UserRepositoryIntegrationTest extends AbstractIntegrationTest {
 	
 	@Rule
 	public TestName testName = new TestName();
@@ -71,6 +73,28 @@ public class UserIntegrationTest extends AbstractIntegrationTest {
 	public void testDeleteUser() throws Exception {
 		User basicUser = createUser(testName);
 		userRepository.deleteById(basicUser.getId());
+	}
+	
+	@Test
+	public void testGetUserByEmail() throws Exception {
+		User user = createUser(testName);
+		
+		User newlyFoundUser = userRepository.findByEmail(user.getEmail());
+		assertNotNull(newlyFoundUser);
+		assertNotNull(newlyFoundUser.getId());
+	}
+	
+	@Test
+	public void testUpdateUserPassword() throws Exception {
+		User user = createUser(testName);
+		assertNotNull(user);
+		assertNotNull(user.getId());
+		
+		String newPassword = UUID.randomUUID().toString();
+		userRepository.updateUserPassword(user.getId(), newPassword);
+		
+		user = userRepository.findById(user.getId()).get();
+		assertEquals(newPassword, user.getPassword());
 	}
 	
 }
