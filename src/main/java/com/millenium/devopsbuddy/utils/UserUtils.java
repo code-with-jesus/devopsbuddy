@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.millenium.devopsbuddy.backend.persistence.domain.backend.User;
 import com.millenium.devopsbuddy.web.controller.ForgotMyPasswordController;
+import com.millenium.devopsbuddy.web.domain.frontend.BasicAccountPayload;
 
 public class UserUtils {
 
@@ -39,5 +40,19 @@ public class UserUtils {
 				+ request.getContextPath() + ForgotMyPasswordController.CHANGE_PASSWORD_PATH + "?id=" + userId
 				+ "&token=" + token;
 		return passwordResetUrl;
+	}
+
+	public static <T extends BasicAccountPayload> User fromWebUserToDomainUser(T frontendPayload) {
+		User user = new User();
+		user.setUsername(frontendPayload.getUsername());
+		user.setPassword(frontendPayload.getPassword());
+		user.setFirstName(frontendPayload.getFirstName());
+		user.setLastName(frontendPayload.getLastName());
+		user.setEmail(frontendPayload.getEmail());
+		user.setPhoneNumber(frontendPayload.getPhoneNumber());
+		user.setCountry(frontendPayload.getCountry());
+		user.setDescription(frontendPayload.getDescription());
+		user.setEnabled(true);
+		return user;
 	}
 }
