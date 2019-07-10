@@ -49,4 +49,11 @@ body {
 	letter-spacing: -1px;
 }
 
-
+/*-------------------------
+ *  Signup Form
+ *-------------------------/
+ 
+/** Registration page */
+.fieldError {
+	border: 2px solid red;
+}
