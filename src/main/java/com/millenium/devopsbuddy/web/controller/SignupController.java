@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.millenium.devopsbuddy.backend.persistence.domain.backend.Plan;
 import com.millenium.devopsbuddy.backend.persistence.domain.backend.Role;
@@ -71,6 +72,7 @@ public class SignupController {
 	
 	@PostMapping(SIGNUP_URL_MAPPING)
 	public String signUpPost(@RequestParam(name = "planId", required = true) int planId, 
+							 @RequestParam(name = "file", required = false) MultipartFile file,
 							 @ModelAttribute(PAYLOAD_MODEL_KEY_NAME) @Valid ProAccountPayload payload, 
 							 ModelMap model) throws IOException {
 		
@@ -105,6 +107,15 @@ public class SignupController {
 		// There are certain info that the user doesn't set, such as profile image URL, Stripe customer id, plans and roles
 		LOG.debug("Transforming user payload into User domain object");
 		User user = UserUtils.fromWebUserToDomainUser(payload);
+		
+		if (file != null && !file.isEmpty()) {
+			String profileImageUrl = null;
+			if (profileImageUrl != null) {
+				user.setProfileImageUrl(profileImageUrl);
+			} else {
+				LOG.warn("There was a problem uploading the profile image to S3. The user's profile will be created without the image");
+			}
+		}
 		
 		// Sets the plans and the roles
 		Plan selectedPlan = planService.finPlanById(planId);
