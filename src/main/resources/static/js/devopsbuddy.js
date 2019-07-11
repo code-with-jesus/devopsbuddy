@@ -190,6 +190,27 @@ function main() {
 						message: 'The value is not valid %s phone number'
 					}
 				}
+			},
+			cardNumber: {
+				validators: {
+					notEmpty: {
+						message: 'The credit card number is required'
+					},
+					creditCard: {
+						message: 'The credit card number is not valid'
+					}
+				}
+			},
+			cardCode: {
+				validators: {
+					notEmpty: {
+						message: 'The CVV number is requiered'
+					},
+					cardCode: {
+						creditCardField: 'cardNumber',
+						message: 'The CVV number is not valid'
+					}
+				}
 			}
 		}
 	})
