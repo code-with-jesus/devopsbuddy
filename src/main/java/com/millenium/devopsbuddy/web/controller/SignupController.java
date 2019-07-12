@@ -2,8 +2,10 @@ package com.millenium.devopsbuddy.web.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -28,9 +30,11 @@ import com.millenium.devopsbuddy.backend.persistence.domain.backend.Role;
 import com.millenium.devopsbuddy.backend.persistence.domain.backend.User;
 import com.millenium.devopsbuddy.backend.persistence.domain.backend.UserRole;
 import com.millenium.devopsbuddy.backend.service.PlanService;
+import com.millenium.devopsbuddy.backend.service.StripeService;
 import com.millenium.devopsbuddy.backend.service.UserService;
 import com.millenium.devopsbuddy.enums.PlansEnum;
 import com.millenium.devopsbuddy.enums.RolesEnum;
+import com.millenium.devopsbuddy.utils.StripeUtils;
 import com.millenium.devopsbuddy.utils.UserUtils;
 import com.millenium.devopsbuddy.web.domain.frontend.ProAccountPayload;
 
@@ -43,6 +47,8 @@ public class SignupController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private StripeService stripeService;
 	
 	/** The application logger */
 	private static final Logger LOG = LoggerFactory.getLogger(SignupController.class);
@@ -144,6 +150,18 @@ public class SignupController {
 				model.addAttribute(ERROR_MESSAGE_KEY, "One or more credit card details is null or empty");
 				return SUBSCRIPTION_VIEW_NAME;
 			}
+			
+			Map<String, Object> stripeTokenParams = StripeUtils.extractTokenParamsFromSignupPayload(payload);
+			Map<String, Object> customerParams = new HashMap<>();
+			customerParams.put("description", "DevOps Buddy customer. Username: " + payload.getUsername());
+			customerParams.put("email", payload.getEmail());
+			customerParams.put("plan", selectedPlan.getId());
+			
+			LOG.info("Subscribing the customer to plan {}", selectedPlan.getName());
+			String stripeCustomerId = stripeService.createCustomer(stripeTokenParams, customerParams);
+			LOG.info("Usernam: {} has been subscribed to Stripe", payload.getUsername());
+			
+			user.setStripeCustomerId(stripeCustomerId);
 			roles.add(new UserRole(user, new Role(RolesEnum.PRO)));
 			registeredUser = userService.createUser(user, PlansEnum.PRO, roles);
 			LOG.debug(payload.toString());

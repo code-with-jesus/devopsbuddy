@@ -83,20 +83,27 @@
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
 
+		<!-- Stripe dependencies -->
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>1.40.0</version>
+		</dependency>
+
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>uk.co.jemos.podam</groupId>
 			<artifactId>podam</artifactId>
 			<version>6.0.2.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>
